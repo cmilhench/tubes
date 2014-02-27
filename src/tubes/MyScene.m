@@ -32,6 +32,11 @@ typedef enum : uint8_t {
     CGFloat _accelerationZ;
     int _visibility;
     int _hoops;
+    CGFloat _hitpoints;
+    CGFloat _maxhealth;
+    CFTimeInterval _elapsedTotal;
+    SKLabelNode* _scoreLabel;
+    SKLabelNode* _healthLabel;
 }
 
 #pragma mark -
@@ -41,7 +46,11 @@ typedef enum : uint8_t {
 -(id)initWithSize:(CGSize)size {    
     if (self = [super initWithSize:size]) {
         
+        self.backgroundColor = [SKColor colorWithRed:0x00/255.0 green:0x00/255.0 blue:0x00/255.0 alpha:0.1];
+        
         _contacts = [NSMutableArray array];
+        _maxhealth = 5;
+        _hitpoints = 5;
         _visibility = 10;
         _accelerationZ = 50;
         _velocityZ = 10;
@@ -60,6 +69,10 @@ typedef enum : uint8_t {
     return self;
 }
 
+#pragma mark -
+#pragma mark Helper methods
+#pragma mark -
+
 - (void)createScene {
     _world = [self createWorld];
     for (_hoops = 0; _hoops < _visibility; _hoops++) {
@@ -68,6 +81,7 @@ typedef enum : uint8_t {
     [_world addChild:_camera = [self createCamera]];
     [_world addChild:[self createPlayer]];
     [self addChild:_world];
+    [self createHud];
 }
 
 - (SKNode*)createWorld {
@@ -124,7 +138,7 @@ typedef enum : uint8_t {
     SKShapeNode *node = [SKShapeNode node];
     node.path = path;
     node.lineWidth = 1.0;
-    node.fillColor = [SKColor colorWithRed:0xEA/255.0 green:0xEB/255.0 blue:0xEA/255.0 alpha:0.1];
+    node.fillColor = [SKColor colorWithRed:0x00/255.0 green:0x00/255.0 blue:0x00/255.0 alpha:0.1];
     node.strokeColor = [SKColor colorWithRed:0xEA/255.0 green:0xEB/255.0 blue:0xEA/255.0 alpha:1.0];
     node.position = CGPointMake(0, 0);
     [node.userData setObject:[NSValue valueWithCGPoint:node.position] forKey:@"origin"];
@@ -162,6 +176,32 @@ typedef enum : uint8_t {
     [node attachDebugRectWithSize:size];
     CGPathRelease(path);
     return node;
+}
+
+-(void)createHud {
+    _scoreLabel = [SKLabelNode labelNodeWithFontNamed:@"Courier"];
+    //1
+    _scoreLabel.name = @"kScoreHudName";
+    _scoreLabel.fontSize = 15;
+    //2
+    _scoreLabel.fontColor = [SKColor greenColor];
+    _scoreLabel.text = [NSString stringWithFormat:@"Score: %04u", 0];
+    //3
+    _scoreLabel.position = CGPointMake(20 + _scoreLabel.frame.size.width/2,
+                                      self.size.height - (20 + _scoreLabel.frame.size.height/2));
+    [self addChild:_scoreLabel];
+    
+    _healthLabel = [SKLabelNode labelNodeWithFontNamed:@"Courier"];
+    //4
+    _healthLabel.name = @"kHealthHudName";
+    _healthLabel.fontSize = 15;
+    //5
+    _healthLabel.fontColor = [SKColor redColor];
+    _healthLabel.text = [NSString stringWithFormat:@"Health: %.1f%%", 100.0f];
+    //6
+    _healthLabel.position = CGPointMake(self.size.width - _healthLabel.frame.size.width/2 - 20,
+                                       self.size.height - (20 + _healthLabel.frame.size.height/2));
+    [self addChild:_healthLabel];
 }
 
 - (void)moveNode:(SKNode*)node asSeenFrom:(SKNode*)camera withFocallength:(float)focallength {
@@ -216,6 +256,7 @@ typedef enum : uint8_t {
 -(void)update:(CFTimeInterval)currentTime {
     if (_last == 0) _last = currentTime;
     CFTimeInterval elapsedSeconds = (currentTime - _last);
+    _elapsedTotal += elapsedSeconds;
     
     // Accelerate
     if (_velocityZ < 250) {
@@ -253,9 +294,15 @@ typedef enum : uint8_t {
             [_contacts removeObject:obsticle];
             // bounce
             _velocityZ *= -.8;
+            // adjust score
+            if (_hitpoints-- == 0) {
+                // end game 
+            }
+            _healthLabel.text = [NSString stringWithFormat:@"Health: %.1f%%", _hitpoints/_maxhealth*100];
         }
     }
-    
+    _scoreLabel.text = [NSString stringWithFormat:@"Score: %04u", _hoops];
+
     _last = currentTime;
 }
 
