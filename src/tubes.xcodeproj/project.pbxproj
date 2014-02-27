@@ -25,7 +25,6 @@
 		3B38F90618BCCD1200A842D1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3B38F90418BCCD1200A842D1 /* InfoPlist.strings */; };
 		3B38F90818BCCD1200A842D1 /* tubesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B38F90718BCCD1200A842D1 /* tubesTests.m */; };
 		3B38F91318BCDCA800A842D1 /* SKNode+Debug.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B38F91218BCDCA800A842D1 /* SKNode+Debug.m */; };
-		3B38F91618BCF4CE00A842D1 /* SKShapeNode3.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B38F91518BCF4CE00A842D1 /* SKShapeNode3.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,8 +63,6 @@
 		3B38F90718BCCD1200A842D1 /* tubesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = tubesTests.m; sourceTree = "<group>"; };
 		3B38F91118BCDCA800A842D1 /* SKNode+Debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKNode+Debug.h"; sourceTree = "<group>"; };
 		3B38F91218BCDCA800A842D1 /* SKNode+Debug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SKNode+Debug.m"; sourceTree = "<group>"; };
-		3B38F91418BCF4CE00A842D1 /* SKShapeNode3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKShapeNode3.h; sourceTree = "<group>"; };
-		3B38F91518BCF4CE00A842D1 /* SKShapeNode3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKShapeNode3.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,8 +136,6 @@
 				3B38F8DE18BCCD1200A842D1 /* Supporting Files */,
 				3B38F91118BCDCA800A842D1 /* SKNode+Debug.h */,
 				3B38F91218BCDCA800A842D1 /* SKNode+Debug.m */,
-				3B38F91418BCF4CE00A842D1 /* SKShapeNode3.h */,
-				3B38F91518BCF4CE00A842D1 /* SKShapeNode3.m */,
 			);
 			path = tubes;
 			sourceTree = "<group>";
@@ -275,7 +270,6 @@
 				3B38F8F118BCCD1200A842D1 /* MyScene.m in Sources */,
 				3B38F8EE18BCCD1200A842D1 /* ViewController.m in Sources */,
 				3B38F8E818BCCD1200A842D1 /* AppDelegate.m in Sources */,
-				3B38F91618BCF4CE00A842D1 /* SKShapeNode3.m in Sources */,
 				3B38F8E418BCCD1200A842D1 /* main.m in Sources */,
 				3B38F91318BCDCA800A842D1 /* SKNode+Debug.m in Sources */,
 			);

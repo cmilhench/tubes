@@ -8,9 +8,7 @@
 
 #import "SKNode+Debug.h"
 
-#define MayaBlue [SKColor colorWithRed:0x87/255.0 green:0xB9/255.0 blue:0xFF/255.0 alpha:1.0]
-
-static BOOL kDebugDraw = YES;
+static BOOL kDebugDraw = NO;
 
 @implementation SKNode (Debug)
 
@@ -18,7 +16,6 @@ static BOOL kDebugDraw = YES;
 {
     CGRect pathRect = CGRectMake(-size.width / 2, -size.height / 2, size.width, size.height);
     CGPathRef path = CGPathCreateWithRect(pathRect ,nil);
-    NSLog(@"%fx%f", size.width, size.height);
     [self attachDebugFrameFromPath:path];
     CGPathRelease(path);
 }
@@ -29,7 +26,7 @@ static BOOL kDebugDraw = YES;
     
     SKShapeNode *shape = [SKShapeNode node];
     shape.path = path;
-    shape.strokeColor = MayaBlue;
+    shape.strokeColor = [SKColor colorWithRed:0xFF/255.0 green:0x00/255.0 blue:0x00/255.0 alpha:1.0];
     shape.lineWidth = 1.0;
     
     [self addChild:shape];
