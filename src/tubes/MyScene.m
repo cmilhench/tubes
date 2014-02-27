@@ -7,6 +7,7 @@
 //
 
 #import "MyScene.h"
+#import "GameOverScene.h"
 #import "SKNode+Debug.h"
 
 /* Constants.h */
@@ -32,6 +33,7 @@ typedef enum : uint8_t {
     CGFloat _accelerationZ;
     int _visibility;
     int _hoops;
+    BOOL _gameOver;
     CGFloat _hitpoints;
     CGFloat _maxhealth;
     CFTimeInterval _elapsedTotal;
@@ -49,8 +51,8 @@ typedef enum : uint8_t {
         self.backgroundColor = [SKColor colorWithRed:0x00/255.0 green:0x00/255.0 blue:0x00/255.0 alpha:0.1];
         
         _contacts = [NSMutableArray array];
-        _maxhealth = 5;
-        _hitpoints = 5;
+        _maxhealth = 3;
+        _hitpoints = _maxhealth;
         _visibility = 10;
         _accelerationZ = 50;
         _velocityZ = 10;
@@ -149,7 +151,7 @@ typedef enum : uint8_t {
     // add one every 5 hoops, and each time you go past 10 hoops, add another
     // so that by the time you have gone past 50 hoops - add one every single hoop
     if (index >= 50 || (index > 0 && index % (int)ceil(5 - index/10) == 0)) {
-        int scale = 4;
+        int scale = 8;
         int i = arc4random() % (scale * scale);
         SKNode *obsticle = [self createObsticle:scale];
         CGFloat x = ((i/scale)+.5)*(size.width/scale);
@@ -180,25 +182,20 @@ typedef enum : uint8_t {
 
 -(void)createHud {
     _scoreLabel = [SKLabelNode labelNodeWithFontNamed:@"Courier"];
-    //1
     _scoreLabel.name = @"kScoreHudName";
     _scoreLabel.fontSize = 15;
-    //2
     _scoreLabel.fontColor = [SKColor greenColor];
     _scoreLabel.text = [NSString stringWithFormat:@"Score: %04u", 0];
-    //3
     _scoreLabel.position = CGPointMake(20 + _scoreLabel.frame.size.width/2,
                                       self.size.height - (20 + _scoreLabel.frame.size.height/2));
     [self addChild:_scoreLabel];
     
     _healthLabel = [SKLabelNode labelNodeWithFontNamed:@"Courier"];
-    //4
+    //_healthLabel.hidden = YES;
     _healthLabel.name = @"kHealthHudName";
     _healthLabel.fontSize = 15;
-    //5
     _healthLabel.fontColor = [SKColor redColor];
     _healthLabel.text = [NSString stringWithFormat:@"Health: %.1f%%", 100.0f];
-    //6
     _healthLabel.position = CGPointMake(self.size.width - _healthLabel.frame.size.width/2 - 20,
                                        self.size.height - (20 + _healthLabel.frame.size.height/2));
     [self addChild:_healthLabel];
@@ -258,6 +255,14 @@ typedef enum : uint8_t {
     CFTimeInterval elapsedSeconds = (currentTime - _last);
     _elapsedTotal += elapsedSeconds;
     
+    // Is the game over?
+    if (_hitpoints <= 0.0f && !_gameOver) {
+        _gameOver = YES;
+        SKScene * gameOverScene = [[GameOverScene alloc] initWithSize:self.size score:_hoops];
+        SKTransition *reveal = [SKTransition flipHorizontalWithDuration:0.5];
+        [self.view presentScene:gameOverScene transition:reveal];
+    }
+    
     // Accelerate
     if (_velocityZ < 250) {
         _velocityZ += (elapsedSeconds * _accelerationZ);
@@ -295,10 +300,8 @@ typedef enum : uint8_t {
             // bounce
             _velocityZ *= -.8;
             // adjust score
-            if (_hitpoints-- == 0) {
-                // end game 
-            }
-            _healthLabel.text = [NSString stringWithFormat:@"Health: %.1f%%", _hitpoints/_maxhealth*100];
+            _healthLabel.text = [NSString stringWithFormat:@"Health: %.1f%%", --_hitpoints/_maxhealth*100];
+            NSLog(@"hitpoints: %f", _hitpoints);
         }
     }
     _scoreLabel.text = [NSString stringWithFormat:@"Score: %04u", _hoops];

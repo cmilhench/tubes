@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B1C96ED18BF7E80007842D2 /* GameOverScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B1C96EC18BF7E80007842D2 /* GameOverScene.m */; };
 		3B38F8D618BCCD1200A842D1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B38F8D518BCCD1200A842D1 /* Foundation.framework */; };
 		3B38F8D818BCCD1200A842D1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B38F8D718BCCD1200A842D1 /* CoreGraphics.framework */; };
 		3B38F8DA18BCCD1200A842D1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B38F8D918BCCD1200A842D1 /* UIKit.framework */; };
@@ -38,6 +39,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3B1C96EB18BF7E80007842D2 /* GameOverScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameOverScene.h; sourceTree = "<group>"; };
+		3B1C96EC18BF7E80007842D2 /* GameOverScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameOverScene.m; sourceTree = "<group>"; };
 		3B38F8D218BCCD1200A842D1 /* tubes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tubes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B38F8D518BCCD1200A842D1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		3B38F8D718BCCD1200A842D1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -136,6 +139,8 @@
 				3B38F8DE18BCCD1200A842D1 /* Supporting Files */,
 				3B38F91118BCDCA800A842D1 /* SKNode+Debug.h */,
 				3B38F91218BCDCA800A842D1 /* SKNode+Debug.m */,
+				3B1C96EB18BF7E80007842D2 /* GameOverScene.h */,
+				3B1C96EC18BF7E80007842D2 /* GameOverScene.m */,
 			);
 			path = tubes;
 			sourceTree = "<group>";
@@ -271,6 +276,7 @@
 				3B38F8EE18BCCD1200A842D1 /* ViewController.m in Sources */,
 				3B38F8E818BCCD1200A842D1 /* AppDelegate.m in Sources */,
 				3B38F8E418BCCD1200A842D1 /* main.m in Sources */,
+				3B1C96ED18BF7E80007842D2 /* GameOverScene.m in Sources */,
 				3B38F91318BCDCA800A842D1 /* SKNode+Debug.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
