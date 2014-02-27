@@ -30,7 +30,8 @@ typedef enum : uint8_t {
     CFTimeInterval _last;
     CGFloat _velocityZ;
     CGFloat _accelerationZ;
-    int visible;
+    int _visibility;
+    int _hoops;
 }
 
 #pragma mark -
@@ -41,6 +42,7 @@ typedef enum : uint8_t {
     if (self = [super initWithSize:size]) {
         
         _contacts = [NSMutableArray array];
+        _visibility = 10;
         _accelerationZ = 50;
         _velocityZ = 10;
         
@@ -60,8 +62,8 @@ typedef enum : uint8_t {
 
 - (void)createScene {
     _world = [self createWorld];
-    for (visible = 0; visible < 10; visible++) {
-        [_world addChild:[self createHoopAtIndex:visible]];
+    for (_hoops = 0; _hoops < _visibility; _hoops++) {
+        [_world addChild:[self createHoopAtIndex:_hoops]];
     }
     [_world addChild:_camera = [self createCamera]];
     [_world addChild:[self createPlayer]];
@@ -130,8 +132,8 @@ typedef enum : uint8_t {
     node.name = @"hoop";
     [self moveNode:node asSeenFrom:_camera withFocallength:50];
     CGPathRelease(path);
-    // add one every 5, and each time you go past 10, add another
-    // so that by the time you have gone past 50 - add one every 1
+    // add one every 5 hoops, and each time you go past 10 hoops, add another
+    // so that by the time you have gone past 50 hoops - add one every single hoop
     if (index >= 50 || (index > 0 && index % (int)ceil(5 - index/10) == 0)) {
         int scale = 4;
         int i = arc4random() % (scale * scale);
@@ -156,7 +158,7 @@ typedef enum : uint8_t {
     node.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:size];
     node.physicsBody.dynamic = NO;
     node.physicsBody.affectedByGravity = NO;
-    node.physicsBody.categoryBitMask = ColliderTypeNothing;
+    node.physicsBody.categoryBitMask = ColliderTypeObsticle;
     [node attachDebugRectWithSize:size];
     CGPathRelease(path);
     return node;
@@ -225,28 +227,32 @@ typedef enum : uint8_t {
     // TODO: read imput and apply force
     
     // Perspective
+    int visibility = -(50 * _visibility);
     [_world enumerateChildNodesWithName:@"hoop" usingBlock:^(SKNode *node, BOOL *stop) {
         [self moveNode:node asSeenFrom:_camera withFocallength:50];
-        
-        if (_camera.zPosition - node.zPosition <= 20) {
-            for (int i=0; i< node.children.count; i++) {
-                ((SKNode*)[node.children objectAtIndex:i]).physicsBody.categoryBitMask = ColliderTypeObsticle;
-            }
-        }
-        
-        if (node.xScale > 1.5) {
+        // Hide nodes that are behind
+        node.hidden = (node.xScale > 1);
+        // Remove nodes that are behind, if out of visibility
+        if (_camera.zPosition - visibility < node.zPosition) {
             [node removeFromParent];
-            [_world addChild:[self createHoopAtIndex:++visible]];
         }
     }];
+    // Create nodes that are infront, if in visibility.
+    if (_camera.zPosition + visibility < -(50 * _hoops)) {
+        [_world addChild:[self createHoopAtIndex:++_hoops]];
+    }
     
     // Collisions at this depts?
     for (int i = 0; i < _contacts.count; i++) {
         SKNode *obsticle = [_contacts objectAtIndex:i];
         CGFloat z = obsticle.parent.zPosition;
-        if (_camera.zPosition - z <= 20) {
-            NSLog(@"COLLISION");
+        // if contact is at this depth
+        int distance = abs(_camera.zPosition - z);
+        if (distance <= 5) {
             ((SKShapeNode *)obsticle).fillColor = DeepLilac;
+            [_contacts removeObject:obsticle];
+            // bounce
+            _velocityZ *= -.8;
         }
     }
     
